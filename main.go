@@ -6,12 +6,22 @@ import(
 )
 
 func main() {
+
+	//  Define handler
 	helloHandler := func(w http.ResponseWriter, req *http.Request) {
+		// Handler processing details
 		io.WriteString(w , "Hello, World!\n")
 	}
 
-	http.HandleFunc("/", helloHandler)
+	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
+		io.WriteString(w , "Posting Article...\n")
+	}
 
-	log.Println("server start at port 8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	// Register to use handler
+	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/article", postArticleHandler)
+
+	log.Println("server start at port 8080")
+	// Start Server(use ListenAndServe)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
