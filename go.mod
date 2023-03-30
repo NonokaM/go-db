@@ -1,3 +1,3 @@
-module github.com/NonokaM/Go-AP
+module github.com/NonokaM/Go-API
 
 go 1.20
