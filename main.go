@@ -1,25 +1,21 @@
 package main
-import(
-	"io"
+
+import (
 	"log"
+	"io"
 	"net/http"
+
+	"github.com/NonokaM/Go-API/handlers"
 )
 
 func main() {
-
-	//  Define handler
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		// Handler processing details
-		io.WriteString(w , "Hello, World!\n")
-	}
-
-	postArticleHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w , "Posting Article...\n")
-	}
-
 	// Register to use handler
-	http.HandleFunc("/hello", helloHandler)
-	http.HandleFunc("/article", postArticleHandler)
+	http.HandleFunc("/hello", handlers.HelloHandler)
+	http.HandleFunc("/article", handlers.PostArticleHandler)
+	http.HandleFunc("/article/list", handlers.ArticleListHandler)
+	http.HandleFunc("/article/1", handlers.HelloHandler)
+	http.HandleFunc("/article/nice", handlers.PostNiceHandler)
+	http.HandleFunc("/comment", handlers.PostCommentHandler)
 
 	log.Println("server start at port 8080")
 	// Start Server(use ListenAndServe)
