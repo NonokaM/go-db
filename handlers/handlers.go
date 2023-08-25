@@ -17,6 +17,8 @@ func HelloHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 // POST /article のハンドラ
+// ストリームから直接データを取る
+// p.114 図解
 func PostArticleHandler(w http.ResponseWriter, req *http.Request) {
 	var reqArticle models.Article
 	if err := json.NewDecoder(req.Body).Decode(&reqArticle); err != nil {
