@@ -1,25 +1,32 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"database/sql"
+	"fmt"
 
-	"github.com/NonokaM/Go-API/handlers"
-	"github.com/gorilla/mux"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	// Register to use handler
-	r := mux.NewRouter()
+	dbUser := "docker"
+	dbPassword := "docker"
+	dbDatabase := "sampledb"
 
-	r.HandleFunc("/hello", handlers.HelloHandler).Methods(http.MethodGet)
-	r.HandleFunc("/article", handlers.PostArticleHandler).Methods(http.MethodPost)
-	r.HandleFunc("/article/list", handlers.ArticleListHandler).Methods(http.MethodGet)
-	r.HandleFunc("/article/{id:[0-9]+}", handlers.ArticleDetailHandler).Methods(http.MethodGet)
-	r.HandleFunc("/article/nice", handlers.PostNiceHandler).Methods(http.MethodPost)
-	r.HandleFunc("/comment", handlers.PostCommentHandler).Methods(http.MethodPost)
+	// DBに接続するためのアドレス文を定義
+	dbConn := fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/%s?parseTime=true", dbUser, dbPassword, dbDatabase)
 
-	log.Println("server start at port 8080")
-	// Start Server(use ListenAndServe)
-	log.Fatal(http.ListenAndServe(":8080", r))
+	// Open関数を用いてDBに接続
+	db, err := sql.Open("mysql", dbConn)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// プログラムが終了するときに、コネクションがCloseされるようにする
+	defer db.Close()
+
+	// sql.DB型のPingメソッドで疎通確認
+	if err := db.Ping(); err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("connect to DB")
+	}
 }
